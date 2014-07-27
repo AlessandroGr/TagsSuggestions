@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>test</title>
+    <style type="text/css"> 
+   .nm {color: red;}
+   .cty {color: purple;}
+   .hse {color: green;}
+   .yrs {color: black;}
+   [...]
+  </style>
+    <script
+      src="http://code.jquery.com/jquery-latest.js">
+   </script>
+   <script
+      src="http://code.jquery.com/ui/1.9.2/jquery-ui.js">
+   </script>
+   <link
+      rel="stylesheet"
+      href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css" />
+   <script language="JavaScript">
+            $(document).ready(function()
+                              
+                {
+                    var o =[];
+                  $('#scrivo').keyup(function()
+                    {
+                    if ($('#scrivo').val()<=0) {
+                        $('#suggestionTags').empty();
+                        return;
+                    }
+                     var json = (function () {
+                     var json = null;
+                     $.ajax({
+                         'async': false,
+                         'global': false,
+                         'url': "re.json",
+                         'dataType': "json",
+                         'success': function (data) {
+                             json = data;
+                         }
+                           });
+                         return json.Re;
+                     })();
+                     o = $.grep(json, function (n) {
+                        return n.nm.indexOf($('#scrivo').val())!== -1; },false);
+                    $('#suggestionTags').empty();
+                    $.each(o, function(index, value) {
+                        $('#suggestionTags').append("<ul>");
+                        $.each(value,function(i,v){
+                            switch (i) {
+                                case "nm":
+                                    $('#suggestionTags').append("<li class='nm'>"+i + ': ' + v+"</li>");
+                                    break;
+                                case "cty":
+                                    $('#suggestionTags').append("<li class='cty'>"+i + ': ' + v+"</li>");
+                                    break;
+                                case "hse":
+                                    $('#suggestionTags').append("<li class='hse'>"+i + ': ' + v+"</li>");
+                                    break;
+                                case "yrs":
+                                    $('#suggestionTags').append("<li class='yrs'>"+i + ': ' + v+"</li>");
+                                    break;
+                            };
+                            //$('#suggestionTags').append("<li>"+i + ': ' + v+"</li>");
+                        });
+                        $('#suggestionTags').append("</ul>");      
+                              
+                       // $('#suggestionTags').html(index + ': ' + value);
+                      });
+                    
+                  });
+                
+             });
+    
+    
+   </script>
+</head>
+
+<body>
+<div>
+    <input type="text" id="scrivo" />
+    vedi I RE</br>
+    <span id="suggestionTags"></span>
+</div>
+
+
+</body>
+</html>
